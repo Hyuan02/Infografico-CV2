@@ -6,6 +6,7 @@ function preload(){
     game.load.image('imgCenario','./imgCenario.png');
 }
 
+
 function create(){
     limitesCenario = game.add.image(400,300,'imgCenario');
     limitesCenario.anchor.x = 0.5;
@@ -18,7 +19,26 @@ function create(){
 
 }
 
+
 function update(){
+   controles();
+}
+
+
+function checkCollision(x1, y1, x2, y2) {
+     //calcular colisão e retornar true ou false (talvez já tenha no framework, mas não sei)
+}
+
+function displayText(text) {
+    // mostrar balão de fala e esperar interação
+}
+
+function nextLevel() {
+    // função pra passar de uma fase para outra (nem sei se precisa)
+}
+
+
+function controles() {
     if (game.input.keyboard.isDown(Phaser.Keyboard.UP)){
         if(personagem.y>80)
         personagem.y -= 5;
@@ -35,6 +55,4 @@ function update(){
         if(personagem.x<800-personagem.width)
             personagem.x += 5;
     }
-
-    
 }

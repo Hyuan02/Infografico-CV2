@@ -2,13 +2,16 @@ var game = new Phaser.Game(800, 600, Phaser.AUTO, 'phaser-example', { preload: p
 var alternativas = [1, -1, 2, -2];
 var paredesD, paredesE, portas;
 var porta;
+var listaQuiz = new Array();
 
 function preload() {
     game.load.image('teste', 'SpriteTeste.png');
     game.load.image('pd', 'parededireita.png');
     game.load.image('pe', 'paredeesquerda.png');
     console.log('dei load');
+    
 }
+
 
 function create() {
     paredesD = game.add.group();
@@ -27,13 +30,40 @@ function create() {
     porta.scale.y = 0.3;
     porta.anchor.x = 0.5;
     porta.anchor.y = 0.5;
-
+    for (var i = 0; i < 10; i++) {
+        listaQuiz.push(new Quiz("aaa","aaa",1)); //lista com todas as perguntas do quiz
+    }
 }
+
 
 function update() {
     controles();
 }
 
+
+function Quiz(pergunta, respostas) {
+    this.pergunta = pergunta;
+    this.respostas = respostas;
+    //classe para facilitar o acesso ao par pergunta/resposta
+}
+
+
+function QuizResult() {
+    this.resultados = new Array(); //associa escolha do jogador a cada par pergunta/resposta
+
+    function calcularPerfil() {
+        //calcular perfil de jogador com base nos resultados
+    }
+}
+
+
+function displayText(text) {
+    // mostrar balão de fala e esperar interação
+}
+
+function nextQuiz() {
+    // melhor colocar separado a etapa entre uma pergunta e outra
+}
 
 
 function controles(){

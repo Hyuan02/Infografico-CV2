@@ -4,6 +4,7 @@ var paredesD, paredesE, portas;
 var porta;
 var listaQuiz = new Array();
 
+
 function preload() {
     game.load.image('teste', 'SpriteTeste.png');
     game.load.image('pd', 'parededireita.png');
@@ -12,8 +13,14 @@ function preload() {
     
 }
 
+var test1;
 
 function create() {
+    var graphics = game.add.graphics(0, 0);
+    graphics.beginFill(0x000000);
+    graphics.lineStyle(10, 0xffffff, 1);
+    graphics.drawRect(6, 450, 790, 145);
+    window.graphics = graphics;
     paredesD = game.add.group();
     paredesE = game.add.group();
     paredesD.create(500, 40, 'pd');
@@ -24,7 +31,6 @@ function create() {
     // imgD.height = 310;
 
     paredesE.create(-100, 0, 'pe');
-
     porta = game.add.image(260, 240, 'teste');
     porta.scale.x = 0.3;
     porta.scale.y = 0.3;
@@ -33,10 +39,12 @@ function create() {
     for (var i = 0; i < 10; i++) {
         listaQuiz.push(new Quiz("aaa","aaa",1)); //lista com todas as perguntas do quiz
     }
+    
 }
 
 
 function update() {
+    displayText("- You have clicked -\n0 times !");
     controles();
 }
 
@@ -58,7 +66,11 @@ function QuizResult() {
 
 
 function displayText(text) {
-    // mostrar balão de fala e esperar interação
+     text = game.add.text(30, 485, text, {
+        font: "32px Roboto Mono",
+        fill: "#ffffff",
+        align: "left"
+    });
 }
 
 function nextQuiz() {

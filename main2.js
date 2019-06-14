@@ -1,5 +1,5 @@
 var game = new Phaser.Game(1280, 720, Phaser.AUTO, 'phaser-example', { preload: preload, create: create, update: update });
-let personagem, limitesCenario, bounds, composicaoCenario, porta1,porta2, bot, caixaTexto;
+let personagem, limitesCenario, bounds, composicaoCenario, porta1,porta2, bot1, caixaTexto, texto;
 
 function preload(){
     game.load.image('personagemTop','./personagemTop.png');
@@ -15,14 +15,19 @@ function create(){
     personagem = game.add.sprite(400,300,'personagemTop');
     personagem.scale.x = 0.3;
     personagem.scale.y = 0.3;
+    texto = game.add.text(100,100,'Testando texto', {
+        font: "32px Roboto Mono",
+        fill: "#ffffff",
+        align: "left"
+    });
     cenario1();
+    
 }
 
 function update(){
     controles();
     checarColisao();
 }
-
 
 function controles(){
     if (game.input.keyboard.isDown(Phaser.Keyboard.UP)){
@@ -45,30 +50,23 @@ function controles(){
 }
 
 function checarColisao(){
-    if(personagem.alive){
-        if(porta1 && bot){
-            
-        if(checkOverlap(personagem,porta1)){
-            cenario2();
-        }
-        if (checkOverlap(personagem,bot)){
-            if(game.input.keyboard.isDown(Phaser.Keyboard.SPACE))
-                texto = game.add.text(100,100,'Testando texto')
-        }
-        else{
-            if(texto){
-                if(texto.alive)
-                    texto.destroy();
+    if(personagem.alive){    
+            if(checkOverlap(personagem,porta1)){
+                cenario2();
             }
-        }
+
+            if ((checkOverlap(personagem,bot1)) && (game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR))){
+                    texto.visible = true;
+            }
+            else{
+                texto.visible = false;
+            }
         }
         if (porta2){
             if(checkOverlap(personagem,porta2)){
                 cenario1();
             }
         }
-        
-    }
 }
 
 function cenario1(){

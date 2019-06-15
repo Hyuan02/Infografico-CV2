@@ -1,6 +1,6 @@
 var game = new Phaser.Game(1280, 720, Phaser.AUTO, 'phaser-example', { preload: preload, create: create, update: update });
 let personagem, personagemMovimento = true, limitesCenario, bounds, composicaoCenario, porta1, porta2, bot1, caixaTexto, texto, alternativas;
-var indiceDialogo=0;
+var indiceSelecionado = 0, perguntaAtual = [], dialogoAtual;
 var escolha1;
 
 
@@ -57,6 +57,30 @@ function controles() {
                 personagem.x += 5;
         }
     }
+    else{
+        if(alternativas.length>1){
+            selecionaOpcao();
+            if(game.input.keyboard.justPressed(Phaser.Keyboard.DOWN)){
+                if(indiceSelecionado < 3){
+                    indiceSelecionado++;
+                    
+                }
+                    
+            }
+            if(game.input.keyboard.justPressed(Phaser.Keyboard.UP)){
+                if(indiceSelecionado > 0){
+                    indiceSelecionado--;
+                    
+                }
+                    
+            }
+            if(game.input.keyboard.justPressed(Phaser.Keyboard.SPACEBAR)){
+                perguntaAtual[indiceSelecionado].selecionado = true;
+                console.log("selecionado");
+                encerraOpcoes(dialogoAtual);
+            }
+        }
+    }
 
 }
 
@@ -79,9 +103,8 @@ function checarColisao() {
         }
 
         if ((checkOverlap(personagem, bot1)) && (game.input.keyboard.justPressed(Phaser.Keyboard.SPACEBAR))) {
-            personagemMovimento = false;
             entraDialogo(dialogo1);
-
+            
         }
     }
     if (porta2) {
@@ -122,21 +145,59 @@ function checkOverlap(spriteA, spriteB) {
 }
 
 function entraDialogo(dialogo){
-    texto.visible = true;
-    if(indiceDialogo> dialogo.length - 2){
-        texto.visible = false;
-        // personagemMovimento = true;
-        for(alternativa of dialogo[dialogo.length-1].alternativas){
-            let alt = game.add.text(100,120, alternativa.valor);
-            alternativas.add(alt);
+    console.log(dialogo.indiceDialogo);
+    dialogoAtual = dialogo;
+    if(!dialogo.aconteceu){
+        texto.visible = true;
+        personagemMovimento = false;
+        if(dialogo.indiceDialogo < dialogo.conteudo.length){
+            if('alternativas' in dialogo.conteudo[dialogo.indiceDialogo]){
+                // personagemMovimento = true;
+                let i = 0;
+                perguntaAtual = dialogo.conteudo[dialogo.indiceDialogo].alternativas;
+                for(alternativa of perguntaAtual){
+                    i++;
+                    let alt = game.add.text(100,120+(50*i), alternativa.valor);
+                    alternativas.add(alt);
+                } 
+                texto.visible = false;
+            }
+            else if ('texto' in dialogo.conteudo[dialogo.indiceDialogo]){
+                texto.visible = true;
+                texto.setText(dialogo.conteudo[dialogo.indiceDialogo].texto);
+                dialogo.indiceDialogo++;
+            }
         }
-        // console.log(dialogo[dialogo.length-1]); 
-        indiceDialogo = 0;
+        else {
+            texto.visible = false;
+            dialogo.aconteceu = true;
+            personagemMovimento = true;
+        }
+ 
+
     }
-    else{
-        texto.setText(dialogo[indiceDialogo].texto);
-        indiceDialogo++;
-    }
+    
 
 
+}
+
+
+function selecionaOpcao(){
+    if(!personagemMovimento){
+        if(alternativas.length > 1){
+            let textoSelecionado =  alternativas.getAt(indiceSelecionado);
+            textoSelecionado.fill = "red";
+            for(let i=0; i<alternativas.length; i++){
+                if(i != indiceSelecionado){
+                    alternativas.getAt(i).fill = "black";
+                }
+            }
+        }
+    }
+    
+}
+
+function encerraOpcoes(dialogo){
+    alternativas.removeAll(true);
+    dialogo.indiceDialogo++;
 }

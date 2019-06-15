@@ -1,5 +1,10 @@
 var game = new Phaser.Game(1280, 720, Phaser.AUTO, 'phaser-example', { preload: preload, create: create, update: update });
-let personagem, limitesCenario, bounds, composicaoCenario, porta1, porta2, bot1, caixaTexto, texto;
+let personagem, personagemMovimento = true, limitesCenario, bounds, composicaoCenario, porta1, porta2, bot1, caixaTexto, texto, alternativas;
+var indiceDialogo=0;
+var escolha1;
+
+
+
 
 function preload() {
     game.load.image('personagemTop', './personagemTop.png');
@@ -15,14 +20,16 @@ function create() {
     personagem = game.add.sprite(400, 300, 'personagemTop');
     personagem.scale.x = 0.3;
     personagem.scale.y = 0.3;
+    alternativas = game.add.group();
     texto = game.add.text(100, 100, 'Testando texto', {
         font: "32px Roboto Mono",
         fill: "#ffffff",
-        align: "left"
+        align: "left",
+        wordWrap: true,
+        wordWrapWidth: 450
     });
     texto.visible = false;
     cenario1();
-
 }
 
 function update() {
@@ -32,21 +39,23 @@ function update() {
 }
 
 function controles() {
-    if (game.input.keyboard.isDown(Phaser.Keyboard.UP)) {
-        if (personagem.y > 10)
-            personagem.y -= 5;
-    }
-    if (game.input.keyboard.isDown(Phaser.Keyboard.DOWN)) {
-        if (personagem.y < 680)
-            personagem.y += 5;
-    }
-    if (game.input.keyboard.isDown(Phaser.Keyboard.LEFT)) {
-        if (personagem.x > 0)
-            personagem.x -= 5;
-    }
-    if (game.input.keyboard.isDown(Phaser.Keyboard.RIGHT)) {
-        if (personagem.x < 1280 - personagem.width)
-            personagem.x += 5;
+    if(personagemMovimento){
+        if (game.input.keyboard.isDown(Phaser.Keyboard.UP)) {
+            if (personagem.y > 10)
+                personagem.y -= 5;
+        }
+        if (game.input.keyboard.isDown(Phaser.Keyboard.DOWN)) {
+            if (personagem.y < 680)
+                personagem.y += 5;
+        }
+        if (game.input.keyboard.isDown(Phaser.Keyboard.LEFT)) {
+            if (personagem.x > 0)
+                personagem.x -= 5;
+        }
+        if (game.input.keyboard.isDown(Phaser.Keyboard.RIGHT)) {
+            if (personagem.x < 1280 - personagem.width)
+                personagem.x += 5;
+        }
     }
 
 }
@@ -69,13 +78,10 @@ function checarColisao() {
             cenario2();
         }
 
-        if ((checkOverlap(personagem, bot1)) && (game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR))) {
-            game.paused = true;
-            texto.visible = true;
+        if ((checkOverlap(personagem, bot1)) && (game.input.keyboard.justPressed(Phaser.Keyboard.SPACEBAR))) {
+            personagemMovimento = false;
+            entraDialogo(dialogo1);
 
-        }
-        else {
-            texto.visible = false;
         }
     }
     if (porta2) {
@@ -112,5 +118,25 @@ function checkOverlap(spriteA, spriteB) {
     var boundsB = spriteB.getBounds();
 
     return Phaser.Rectangle.intersects(boundsA, boundsB);
+
+}
+
+function entraDialogo(dialogo){
+    texto.visible = true;
+    if(indiceDialogo> dialogo.length - 2){
+        texto.visible = false;
+        // personagemMovimento = true;
+        for(alternativa of dialogo[dialogo.length-1].alternativas){
+            let alt = game.add.text(100,120, alternativa.valor);
+            alternativas.add(alt);
+        }
+        // console.log(dialogo[dialogo.length-1]); 
+        indiceDialogo = 0;
+    }
+    else{
+        texto.setText(dialogo[indiceDialogo].texto);
+        indiceDialogo++;
+    }
+
 
 }

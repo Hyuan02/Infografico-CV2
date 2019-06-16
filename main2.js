@@ -3,6 +3,7 @@ let personagem, personagemMovimento = true, limitesCenario, bounds, composicaoCe
 var indiceSelecionado = 0, perguntaAtual = [], dialogoAtual, dialogoAnn = 0;
 var checaLivros = false, livros;
 var checaGenericos = false, genericos, segundoDialogoGenerico = false;
+var placeholders;
 
 
 
@@ -22,6 +23,7 @@ function preload() {
 
 function create() {
     composicaoCenario = game.add.group();
+    placeholders = game.add.group();
     personagem = game.add.sprite(590, 400, 'personagemTop', 1);
     personagem.animations.add('down', [0, 1, 2], 18, true);
     left = personagem.animations.add('left', [3, 4, 5], 18, true);
@@ -50,6 +52,9 @@ function update() {
     controles();
     checarColisao();
     game.input.onDown.add(unpause, self);
+    game.physics.enable(placeholders, Phaser.Physics.ARCADE);
+    game.physics.arcade.collide(personagem, placeholders);
+
 }
 
 function controles() {
@@ -120,7 +125,7 @@ function unpause(event) {
 
 function checarColisao() {
     if (personagem.alive) {
-        if ((checkOverlap(personagem, bot1)) && (game.input.keyboard.justPressed(Phaser.Keyboard.SPACEBAR))) {
+        if ((game.physics.arcade.overlap(personagem, bot1)) && (game.input.keyboard.justPressed(Phaser.Keyboard.SPACEBAR))) {
             if (dialogoAnn == 0) {
                 entraDialogo(dialogo1);
             }
@@ -155,7 +160,7 @@ function checarColisao() {
     if ((porta3) && (scene == 2)) {
         if (checkOverlap(personagem, porta3)) {
             personagem.x = 100;
-            personagem.y = 240;
+            personagem.y = 130;
             scene = 3;
             cenario3();
         }
@@ -199,7 +204,7 @@ function checarColisao() {
 }
 
 function cenario1() {
-    composicaoCenario.removeAll(); //limpa todos os elementos do cenario antes de compor o outro
+    composicaoCenario.removeAll(true); //limpa todos os elementos do cenario antes de compor o outro
     limitesCenario = composicaoCenario.create(640, 360, 'imgCenario');
     limitesCenario.anchor.x = 0.5;
     limitesCenario.anchor.y = 0.5;
@@ -207,44 +212,56 @@ function cenario1() {
     limitesCenario.height = 720;
     porta1 = composicaoCenario.create(125, 260, 'portaH');
     porta1.visible = false;
-    bot1 = composicaoCenario.create(1220, 400, 'bot');
+    bot1 = composicaoCenario.create(620, 350, 'bot');
+    game.physics.enable(bot1, Phaser.Physics.ARCADE);
+    bot1.body.immovable = true;
+    criarPlaceholders();
 }
 
 function cenario2() {
-    composicaoCenario.removeAll(); //limpa todos os elementos do cenario antes de compor o outro
+    composicaoCenario.removeAll(true); //limpa todos os elementos do cenario antes de compor o outro
+    criarPlaceholders();
     limitesCenario = composicaoCenario.create(640, 360, 'imgCenario2');
     limitesCenario.anchor.x = 0.5;
     limitesCenario.anchor.y = 0.5;
     limitesCenario.width = 1280;
     limitesCenario.height = 720;
     genericos = game.add.group();
-    for(let i=0; i<4; i++){
-        if(i%2 == 0)
-        genericos.create(100 + (50*i), 100, "generico");
-        else
-        genericos.create(100, 100 + (50*i), "generico");
-    }
+    genericos.create(1050, 300, "generico");
+    genericos.create(750, 600, "generico");
+    genericos.create(900, 300, "generico");
+    genericos.create(1100, 600, "generico");
     porta2 = composicaoCenario.create(125, 660, 'portaH');
     porta2.visible = false;
     porta3 = composicaoCenario.create(1230, 240, 'portaV');
     porta3.visible = false;
-    bot2 = composicaoCenario.create(800, 650, "bot");
-    bot4 = composicaoCenario.create(300, 650, 'bot');
+    bot2 = composicaoCenario.create(770, 130, "bot");
+    bot4 = composicaoCenario.create(230, 250, 'bot');
     composicaoCenario.add(genericos);
+    genericos.visible = false;
 }
 
 function cenario3() {
-    composicaoCenario.removeAll(); //limpa todos os elementos do cenario antes de compor o outro
+    composicaoCenario.removeAll(true); //limpa todos os elementos do cenario antes de compor o outro
+    criarPlaceholders();
     limitesCenario = composicaoCenario.create(640, 360, 'imgCenario3');
     livros = game.add.group();
     limitesCenario.anchor.x = 0.5;
     limitesCenario.anchor.y = 0.5;
     limitesCenario.width = 1280;
     limitesCenario.height = 720;
-    bot3 = composicaoCenario.create(200, 100, "bot");
+    bot3 = composicaoCenario.create(300, 400, "bot");
+    bot3.visible = false;
     porta4 = composicaoCenario.create(0, 240, 'portaV');
     porta4.visible = false;
-    composicaoCenario.add(genericos);
+    livros.create(450,100,"bot");
+    livros.create(800,50,"bot");
+    livros.create(1050,50,"bot");
+    livros.create(600,500,"bot");
+    livros.create(850,500,"bot");
+    livros.create(1050,500,"bot");
+    livros.visible = false;
+    composicaoCenario.add(livros);
 }
 
 function checkOverlap(spriteA, spriteB) {
@@ -395,4 +412,97 @@ function checaColisaoGenericos() {
         }
 
     }
+}
+
+function zerarVelocidadePlayer(){
+    personagem.body.velocity.x = 0;
+    personagem.body.velocity.y = 0;
+}
+
+function criarPlaceholders(){
+    placeholders.removeAll(true);
+    if (scene == 1){
+        console.log('entrou');
+        let retangulo1, retangulo2;
+        retangulo1 = placeholders.create(350,250,'livro');
+        retangulo1.width = 550;
+        retangulo1.height = 200;
+        retangulo1.anchor.y = 0.5;
+        retangulo2 = placeholders.create(900,200,'livro');
+        retangulo2.width = 350;
+        retangulo2.height = 200;
+        retangulo2.anchor.y = 0.5;
+        game.physics.enable(retangulo1, Phaser.Physics.ARCADE);
+        game.physics.enable(retangulo2,Phaser.Physics.ARCADE);
+        retangulo1.body.immovable = true;
+        retangulo2.body.immovable = true;
+        game.physics.arcade.collide(personagem, retangulo1);
+        game.physics.arcade.collide(personagem, retangulo2);
+    }
+
+    if(scene == 2){
+        let retangulo1, retangulo2, retangulo3;
+        retangulo1 = placeholders.create(530,500,'livro');
+        retangulo1.width = 200;
+        retangulo1.height = 120;
+        retangulo1.anchor.y = 0.5;
+        retangulo2 = placeholders.create(840,500,'livro');
+        retangulo2.width = 250;
+        retangulo2.height = 200;
+        retangulo2.anchor.y = 0.3;
+        retangulo3 = placeholders.create(500,100,'livro');
+        retangulo3.width = 500;
+        retangulo3.height = 100;
+        retangulo3.anchor.y = 0.3;
+        game.physics.enable(retangulo1, Phaser.Physics.ARCADE);
+        game.physics.enable(retangulo2,Phaser.Physics.ARCADE);
+        game.physics.enable(retangulo3,Phaser.Physics.ARCADE);
+        retangulo1.body.immovable = true;
+        retangulo2.body.immovable = true;
+        retangulo3.body.immovable = true;
+    }
+
+    if(scene == 3){
+        let retangulo1, retangulo2, retangulo3,retangulo4, retangulo5, retangulo6,retangulo7;
+        retangulo1 = placeholders.create(90,50,'livro');
+        retangulo1.width = 200;
+        retangulo1.height = 120;
+        retangulo1.anchor.y = 0.5;
+        retangulo2 = placeholders.create(350,50,'livro');
+        retangulo2.width = 350;
+        retangulo2.height = 120;
+        retangulo2.anchor.y = 0.5;
+        retangulo3 = placeholders.create(760,50,'livro');
+        retangulo3.width = 170;
+        retangulo3.height = 120;
+        retangulo3.anchor.y = 0.5;
+        retangulo4 = placeholders.create(1000,50,'livro');
+        retangulo4.width = 170;
+        retangulo4.height = 120;
+        retangulo4.anchor.y = 0.5;
+        retangulo5 = placeholders.create(1000,310,'livro');
+        retangulo5.width = 170;
+        retangulo5.height = 110;
+        retangulo6 = placeholders.create(790,310,'livro');
+        retangulo6.width = 170;
+        retangulo6.height = 110;
+        retangulo7 = placeholders.create(570,310,'livro');
+        retangulo7.width = 170;
+        retangulo7.height = 110;
+        game.physics.enable(retangulo1, Phaser.Physics.ARCADE);
+        game.physics.enable(retangulo2, Phaser.Physics.ARCADE);
+        game.physics.enable(retangulo3, Phaser.Physics.ARCADE);
+        game.physics.enable(retangulo4, Phaser.Physics.ARCADE);
+        game.physics.enable(retangulo5, Phaser.Physics.ARCADE);
+        game.physics.enable(retangulo6, Phaser.Physics.ARCADE);
+        game.physics.enable(retangulo7, Phaser.Physics.ARCADE);
+        retangulo1.body.immovable = true;
+        retangulo2.body.immovable = true;
+        retangulo3.body.immovable = true;
+        retangulo4.body.immovable = true;
+        retangulo5.body.immovable = true;
+        retangulo6.body.immovable = true;
+        retangulo7.body.immovable = true;
+    }
+    placeholders.visible = false;
 }

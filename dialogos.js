@@ -1,3 +1,13 @@
+//Arquivo responsável pelo armazenamento dos dialogos no jogo, funcionando da seguinte forma:
+//Cada dialogo possui um indice, seu conteudo e uma variavel informando se ele ocorreu ou nao
+// o indice serve para percorrer o conteudo do dialogo andando nos textos e conteudos subsequentes como alternativas ou listas
+//aconteceu verifica se o jogador ja passou pelo dialogo, portanto quando o dialogo e completado, essa variavel fica como true
+//e quando ela esta true, o personagem so ira mostrar o ultimo dialogo na hora de falar.
+//na funcao que lê esse objeto, ela detecta se o conteudo sera um dialogo ou uma pergunta, e se for uma pergunta
+// e redirecionado para outra funcao que ira exibir o seletor.
+
+
+
 dialogo1 = {"indiceDialogo":0, "conteudo": [
     {"nome": "Ann, a Estalajadeira", "texto":"Seja bem-vindo a Taverna das Inspirações caro viajante! O que procura?"},
     {"nome": "Jogador", "texto":"..."},

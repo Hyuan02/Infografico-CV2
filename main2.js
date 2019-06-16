@@ -74,7 +74,7 @@ function controles() {
 
     }
     else{
-        if(alternativas.length>1){
+        if(alternativas.length>1){ //alternativas estando cheio significa que a pessoa esta em uma pergunta, logo entra em modo de selecao
             selecionaOpcao();
             if(game.input.keyboard.justPressed(Phaser.Keyboard.DOWN)){
                 if(indiceSelecionado < 3){
@@ -91,9 +91,9 @@ function controles() {
                     
             }
             if(game.input.keyboard.justPressed(Phaser.Keyboard.SPACEBAR)){
-                perguntaAtual[indiceSelecionado].selecionado = true;
+                perguntaAtual[indiceSelecionado].selecionado = true; //armazena a resposta la no objeto do dialogo
                 console.log("selecionado");
-                encerraOpcoes(dialogoAtual);
+                encerraOpcoes(dialogoAtual); //fecha a caixa de respostas
             }
         }
     }
@@ -241,30 +241,30 @@ function checkOverlap(spriteA, spriteB) {
 
 }
 
-function entraDialogo(dialogo){
+function entraDialogo(dialogo){ //funcao de ler os dialogos
     console.log(dialogo.indiceDialogo);
     dialogoAtual = dialogo;
     if(!dialogo.aconteceu){
         texto.visible = true;
         personagemMovimento = false;
         if(dialogo.indiceDialogo < dialogo.conteudo.length){
-            if('alternativas' in dialogo.conteudo[dialogo.indiceDialogo]){
+            if('alternativas' in dialogo.conteudo[dialogo.indiceDialogo]){ //quando e pergunta
                 // personagemMovimento = true;
                 let i = 0;
-                perguntaAtual = dialogo.conteudo[dialogo.indiceDialogo].alternativas;
+                perguntaAtual = dialogo.conteudo[dialogo.indiceDialogo].alternativas; // a pergunta em que a pessoa esta
                 for(alternativa of perguntaAtual){
                     i++;
-                    let alt = game.add.text(100,120+(50*i), alternativa.valor);
+                    let alt = game.add.text(100,120+(50*i), alternativa.valor); //renderiza o texto de perguntas
                     alternativas.add(alt);
                 } 
                 texto.visible = false;
             }
-            else if ('texto' in dialogo.conteudo[dialogo.indiceDialogo]){
+            else if ('texto' in dialogo.conteudo[dialogo.indiceDialogo]){ //quando e texto
                 texto.visible = true;
                 texto.setText(dialogo.conteudo[dialogo.indiceDialogo].texto);
                 dialogo.indiceDialogo++;
             }
-            else if('lista' in dialogo.conteudo[dialogo.indiceDialogo]){
+            else if('lista' in dialogo.conteudo[dialogo.indiceDialogo]){ //quando e lista
                 texto.visible = true;
                 let textString = "";
                 for(item of dialogo.conteudo[dialogo.indiceDialogo].lista){
@@ -293,7 +293,7 @@ function entraDialogo(dialogo){
 }
 
 
-function selecionaOpcao(){
+function selecionaOpcao(){ //funcao responsavel por ficar trocando o cursor
     if(!personagemMovimento){
         if(alternativas.length > 1){
             let textoSelecionado =  alternativas.getAt(indiceSelecionado);

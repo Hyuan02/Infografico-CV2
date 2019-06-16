@@ -1,14 +1,28 @@
 var game = new Phaser.Game(1280, 720, Phaser.AUTO, 'phaser-example', { preload: preload, create: create, update: update });
-let personagem, personagemMovimento = true, limitesCenario, bounds, composicaoCenario, porta1, porta2, porta3, porta4, bot1, bot2, bot3, bot4, scene, caixaTexto, texto, alternativas, left, right;
-var indiceSelecionado = 0, perguntaAtual = [], dialogoAtual, dialogoAnn = 0;
+let personagem, personagemMovimento = true, limitesCenario, imagensPergunta, bounds, composicaoCenario, porta1, porta2, porta3, porta4, bot1, bot2, bot3, bot4, scene, caixaTexto, texto, alternativas, left, right;
+var indiceSelecionado = 0, perguntaAtual = [], dialogoAtual, dialogoAnn = 0, caixaDialogo;
 var checaLivros = false, livros;
 var checaGenericos = false, genericos, segundoDialogoGenerico = false;
 var placeholders;
 
+WebFontConfig = {
 
+    //  'active' means all requested fonts have finished loading
+    //  We set a 1 second delay before calling 'createText'.
+    //  For some reason if we don't the browser cannot render the text the first time it's created.
+    active: function() { game.time.events.add(Phaser.Timer.SECOND, create, this); },
+
+    //  The Google Fonts we want to load (specify as many as you like in the array)
+    custom:{
+        families:['Wellbutrin'],
+        urls:['./fontes/stylesheet.css']
+    }
+
+};
 
 
 function preload() {
+    game.load.script('webfont', '//ajax.googleapis.com/ajax/libs/webfont/1.4.7/webfont.js');
     game.load.spritesheet('personagemTop', './img/spritesheet.png', 100, 199);
     game.load.image('imgCenario', './img/cenario_01.png');
     game.load.image('imgCenario2', './img/cenario_02.png');
@@ -18,6 +32,13 @@ function preload() {
     game.load.image('bot', './bot.png');
     game.load.image('livro', './livro_teste.png');
     game.load.image('generico', './generico.png');
+    game.load.image('caixaDialogo','./sprites/caixa_de_dialogo.png');
+    game.load.image('esfera1', './sprites/orb_estetica.png');
+    game.load.image('esfera2', './sprites/orb_mecanica.png');
+    game.load.image('esfera3', './sprites/orb_narrativa.png');
+    game.load.image('esfera4', './sprites/orb_tecnologia.png');
+    game.load.image('panfleto','./sprites/quest_xp.png');
+
 
 }
 
@@ -25,23 +46,26 @@ function create() {
     composicaoCenario = game.add.group();
     placeholders = game.add.group();
     personagem = game.add.sprite(590, 400, 'personagemTop', 1);
+    caixaDialogo = game.add.image(100,400,'caixaDialogo');
+    caixaDialogo.visible = false;
     personagem.animations.add('down', [0, 1, 2], 18, true);
     left = personagem.animations.add('left', [3, 4, 5], 18, true);
     personagem.animations.add('up', [6, 7, 8], 18, true);
     right = personagem.animations.add('right', [9, 10, 11], 18, true);
     personagem.smoothed = false;
 
-
     game.physics.enable(personagem, Phaser.Physics.ARCADE);
 
     cursors = game.input.keyboard.createCursorKeys();
     alternativas = game.add.group();
-    texto = game.add.text(100, 100, 'Testando texto', {
-        font: "32px Roboto Mono",
-        fill: "#ffffff",
+    imagensPergunta = game.add.group();
+    imagensPergunta.visible = false;
+    texto = game.add.text(150, 460, 'Testando texto', {
+        font: "24px Wellbutrin",
+        fill: "black",
         align: "left",
         wordWrap: true,
-        wordWrapWidth: 450
+        wordWrapWidth: 900
     });
     texto.visible = false;
     scene = 1;
@@ -279,15 +303,29 @@ function entraDialogo(dialogo) { //funcao de ler os dialogos
     if (!dialogo.aconteceu) {
         texto.visible = true;
         personagemMovimento = false;
+        caixaDialogo.visible = true;
         if (dialogo.indiceDialogo < dialogo.conteudo.length) {
             if ('alternativas' in dialogo.conteudo[dialogo.indiceDialogo]) { //quando e pergunta
                 // personagemMovimento = true;
-                let i = 0;
+                let config = {font:'Wellbutrin', fontSize:'32px'}
                 perguntaAtual = dialogo.conteudo[dialogo.indiceDialogo].alternativas; // a pergunta em que a pessoa esta
-                for (alternativa of perguntaAtual) {
-                    i++;
-                    let alt = game.add.text(100, 120 + (50 * i), alternativa.valor); //renderiza o texto de perguntas
-                    alternativas.add(alt);
+            // let alt = game.add.text(100, 120 + (50 * i), alternativa.valor); //renderiza o texto de perguntas
+                alternativas.add(game.add.text(150,460,perguntaAtual[0].valor.toUpperCase(), config));
+                alternativas.add(game.add.text(150,540,perguntaAtual[1].valor.toUpperCase(), config));
+                alternativas.add(game.add.text(600,460,perguntaAtual[2].valor.toUpperCase(), config));
+                alternativas.add(game.add.text(600,540,perguntaAtual[3].valor.toUpperCase(), config));
+                if('imagens' in dialogo.conteudo[dialogo.indiceDialogo]){
+                    let i = 0;
+                    for(imagem of dialogo.conteudo[dialogo.indiceDialogo].imagens){
+                        console.log("entrou");
+                        console.log(imagem);
+                        imagensPergunta.create(100 + (i*100),100,imagem);
+                        // game.add.image(200 * (i+200),200,'esfera1');
+                        i++;
+                    }
+                    imagensPergunta.visible = true;
+                    imagensPergunta.scale.x = 2;
+                    imagensPergunta.scale.y = 2;
                 }
                 texto.visible = false;
             }
@@ -308,6 +346,7 @@ function entraDialogo(dialogo) { //funcao de ler os dialogos
         }
         else {
             texto.visible = false;
+            caixaDialogo.visible = false;
             dialogo.aconteceu = true;
             personagemMovimento = true;
         }
@@ -317,6 +356,7 @@ function entraDialogo(dialogo) { //funcao de ler os dialogos
     else {
         texto.setText(dialogo.conteudo[dialogo.indiceDialogo - 1].texto);
         texto.visible = !texto.visible;
+        caixaDialogo.visible = !caixaDialogo.visible;
         personagemMovimento = !personagemMovimento;
     }
 }
@@ -326,7 +366,7 @@ function selecionaOpcao() { //funcao responsavel por ficar trocando o cursor
     if (!personagemMovimento) {
         if (alternativas.length > 1) {
             let textoSelecionado = alternativas.getAt(indiceSelecionado);
-            textoSelecionado.fill = "red";
+            textoSelecionado.fill = "#1F8DDA";
             for (let i = 0; i < alternativas.length; i++) {
                 if (i != indiceSelecionado) {
                     alternativas.getAt(i).fill = "black";
@@ -339,6 +379,8 @@ function selecionaOpcao() { //funcao responsavel por ficar trocando o cursor
 
 function encerraOpcoes(dialogo) {
     alternativas.removeAll(true);
+    imagensPergunta.removeAll(true);
+    imagensPergunta.visible = false;
     dialogo.indiceDialogo++;
     perguntaAtual = [];
 }

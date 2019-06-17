@@ -64,7 +64,7 @@ function create() {
     alternativas = game.add.group();
     imagensPergunta = game.add.group();
     imagensPergunta.visible = false;
-    texto = game.add.text(150, 460, 'Testando texto', {
+    texto = game.add.text(150, 430, 'Testando texto', {
         font: "24px Wellbutrin",
         fill: "black",
         align: "left",
@@ -239,7 +239,7 @@ function checarColisao() {
     if ((porta4) && (scene == 3)) {
         if (checkOverlap(personagem, porta4)) {
             personagem.x = 1100;
-            personagem.y = 240;
+            personagem.y = 160;
             scene = 2;
             cenario2();
         }
@@ -256,6 +256,7 @@ function cenario1() {
     porta1 = composicaoCenario.create(125, 260, 'portaH');
     porta1.visible = false;
     porta5 = composicaoCenario.create(550,700,'portaH');
+    porta5.visible = false;
     bot1 = composicaoCenario.create(620, 350, 'bot');
     game.physics.enable(bot1, Phaser.Physics.ARCADE);
     bot1.body.immovable = true;
@@ -281,8 +282,10 @@ function cenario2() {
     genericos.create(1100, 600, "generico");
     porta2 = composicaoCenario.create(125, 660, 'portaH');
     porta2.visible = false;
-    porta3 = composicaoCenario.create(1230, 240, 'portaV');
+    porta3 = composicaoCenario.create(1270, 240, 'portaV');
     porta3.visible = false;
+    porta3.height = 20;
+    porta3.width =10;
     bot2 = composicaoCenario.create(770, 130, "bot");
     bot2.visible = false;
     bot4 = composicaoCenario.create(230, 250, 'bot');
@@ -357,7 +360,7 @@ function entraDialogo(dialogo) { //funcao de ler os dialogos
             }
             else if ('texto' in dialogo.conteudo[dialogo.indiceDialogo]) { //quando e texto
                 texto.visible = true;
-                texto.setText(dialogo.conteudo[dialogo.indiceDialogo].texto);
+                texto.setText(dialogo.conteudo[dialogo.indiceDialogo].nome.toUpperCase() + ":\n" + dialogo.conteudo[dialogo.indiceDialogo].texto);
                 dialogo.indiceDialogo++;
             }
             else if ('lista' in dialogo.conteudo[dialogo.indiceDialogo]) { //quando e lista
@@ -380,7 +383,7 @@ function entraDialogo(dialogo) { //funcao de ler os dialogos
 
     }
     else {
-        texto.setText(dialogo.conteudo[dialogo.indiceDialogo - 1].texto);
+        texto.setText(dialogo.conteudo[dialogo.indiceDialogo-1].nome.toUpperCase() + ":\n" + dialogo.conteudo[dialogo.indiceDialogo - 1].texto);
         texto.visible = !texto.visible;
         caixaDialogo.visible = !caixaDialogo.visible;
         personagemMovimento = !personagemMovimento;
@@ -509,25 +512,37 @@ function criarPlaceholders(){ // funcao responsavel pela colisao com os objetos,
     }
 
     if(scene == 2){
-        let retangulo1, retangulo2, retangulo3;
-        retangulo1 = placeholders.create(530,500,'livro');
-        retangulo1.width = 200;
+        let retangulo1, retangulo2, retangulo3, retangulo4, retangulo5;
+        retangulo1 = placeholders.create(540,500,'livro');
+        retangulo1.width = 180;
         retangulo1.height = 120;
         retangulo1.anchor.y = 0.5;
-        retangulo2 = placeholders.create(840,500,'livro');
-        retangulo2.width = 250;
-        retangulo2.height = 200;
+        retangulo2 = placeholders.create(940,450,'livro');
+        retangulo2.width = 165;
+        retangulo2.height = 150;
         retangulo2.anchor.y = 0.3;
-        retangulo3 = placeholders.create(500,100,'livro');
-        retangulo3.width = 500;
-        retangulo3.height = 100;
+        retangulo3 = placeholders.create(500,80,'livro');
+        retangulo3.width = 600;
+        retangulo3.height = 60;
         retangulo3.anchor.y = 0.3;
+        retangulo4 = placeholders.create(100,120,'livro');
+        retangulo4.width = 350;
+        retangulo4.height = 100;
+        retangulo4.anchor.y = 0.3;
+        retangulo5 = placeholders.create(840,440,'livro');
+        retangulo5.width = 55;
+        retangulo5.height = 130;
+        retangulo5.anchor.y = 0.3;
         game.physics.enable(retangulo1, Phaser.Physics.ARCADE);
         game.physics.enable(retangulo2,Phaser.Physics.ARCADE);
         game.physics.enable(retangulo3,Phaser.Physics.ARCADE);
+        game.physics.enable(retangulo4,Phaser.Physics.ARCADE);
+        game.physics.enable(retangulo5,Phaser.Physics.ARCADE);
         retangulo1.body.immovable = true;
         retangulo2.body.immovable = true;
         retangulo3.body.immovable = true;
+        retangulo4.body.immovable = true;
+        retangulo5.body.immovable = true;
     }
 
     if(scene == 3){

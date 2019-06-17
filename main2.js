@@ -1,9 +1,11 @@
-var game = new Phaser.Game(1280, 720, Phaser.AUTO, 'phaser-example', { preload: preload, create: create, update: update });
-let personagem, personagemMovimento = true, limitesCenario, imagensPergunta, bounds, composicaoCenario, porta1, porta2, porta3, porta4, bot1, bot2, bot3, bot4, scene, caixaTexto, texto, alternativas, left, right;
+var game = new Phaser.Game(1280, 720, Phaser.CANVAS, 'phaser-example', { preload: preload, create: create, update: update });
+let personagem, personagemMovimento = true, limitesCenario, imagensPergunta, bounds, composicaoCenario, porta1, porta2, porta3, porta4,porta5, bot1, bot2, bot3, bot4, scene, caixaTexto, texto, alternativas, left, right;
 var indiceSelecionado = 0, perguntaAtual = [], dialogoAtual, dialogoAnn = 0, caixaDialogo;
 var checaLivros = false, livros;
 var checaGenericos = false, genericos, segundoDialogoGenerico = false;
 var placeholders;
+var salvo = false, canetaSave = {};
+let telaConclusao, textoConclusao;
 
 WebFontConfig = {
 
@@ -38,8 +40,11 @@ function preload() {
     game.load.image('esfera3', './sprites/orb_narrativa.png');
     game.load.image('esfera4', './sprites/orb_tecnologia.png');
     game.load.image('panfleto','./sprites/quest_xp.png');
-
-
+    game.load.image('caneta_pena', './sprites/caneta_pena.png');
+    game.load.image('caixaParabens2', './sprites/caixa_parabens2.png');
+    game.load.image('bauAberto', './sprites/bau_aberto.png');
+    game.load.image('bauFechado', './sprites/bau_fechado.png');
+    game.load.image('caixa_erro','./sprites/caixa_erro.png');
 }
 
 function create() {
@@ -55,7 +60,6 @@ function create() {
     personagem.smoothed = false;
 
     game.physics.enable(personagem, Phaser.Physics.ARCADE);
-
     cursors = game.input.keyboard.createCursorKeys();
     alternativas = game.add.group();
     imagensPergunta = game.add.group();
@@ -70,6 +74,7 @@ function create() {
     texto.visible = false;
     scene = 1;
     cenario1();
+    // concluirJogo();
 }
 
 function update() {
@@ -171,7 +176,21 @@ function checarColisao() {
             personagem.y = 450;
             cenario2();
         }
+
+        if('alive' in canetaSave){
+            if(checkOverlap(personagem, canetaSave) && (game.input.keyboard.justPressed(Phaser.Keyboard.SPACEBAR))){
+                entraDialogo(dialogoSave)
+                salvo = true;
+            }
+        }
+
+        if(checkOverlap(personagem,porta5)){
+            concluirJogo();
+        }
+
     }
+
+
     if ((porta2) && (scene == 2)) {
         if (checkOverlap(personagem, porta2)) {
             scene = 1;
@@ -236,9 +255,14 @@ function cenario1() {
     limitesCenario.height = 720;
     porta1 = composicaoCenario.create(125, 260, 'portaH');
     porta1.visible = false;
+    porta5 = composicaoCenario.create(550,700,'portaH');
     bot1 = composicaoCenario.create(620, 350, 'bot');
     game.physics.enable(bot1, Phaser.Physics.ARCADE);
     bot1.body.immovable = true;
+    bot1.visible = false;
+    if(dialogoAnn == 2){
+        canetaSave = composicaoCenario.create(800,350, 'caneta_pena');
+    }
     criarPlaceholders();
 }
 
@@ -260,7 +284,9 @@ function cenario2() {
     porta3 = composicaoCenario.create(1230, 240, 'portaV');
     porta3.visible = false;
     bot2 = composicaoCenario.create(770, 130, "bot");
+    bot2.visible = false;
     bot4 = composicaoCenario.create(230, 250, 'bot');
+    bot4.visible = false;
     composicaoCenario.add(genericos);
     genericos.visible = false;
 }
@@ -547,4 +573,94 @@ function criarPlaceholders(){
         retangulo7.body.immovable = true;
     }
     placeholders.visible = false;
+}
+
+function concluirJogo(){
+    let alternativasValores = [];
+    for(conteudo of dialogo1.conteudo){
+        if('alternativas' in conteudo){
+            for(alternativa of conteudo.alternativas){
+                if(alternativa.selecionado){
+                    alternativasValores.push(alternativa.valor);
+                }
+            }
+        }
+    }
+    for(conteudo of dialogo2.conteudo){
+        if('alternativas' in conteudo){
+            for(alternativa of conteudo.alternativas){
+                if(alternativa.selecionado){
+                    alternativasValores.push(alternativa.valor);
+                }
+            }
+        }
+    }
+    for(conteudo of dialogo4.conteudo){
+        if('alternativas' in conteudo){
+            for(alternativa of conteudo.alternativas){
+                if(alternativa.selecionado){
+                    alternativasValores.push(alternativa.valor);
+                }
+            }
+        }
+    }
+    for(conteudo of dialogo6.conteudo){
+        if('alternativas' in conteudo){
+            for(alternativa of conteudo.alternativas){
+                if(alternativa.selecionado){
+                    alternativasValores.push(alternativa.valor);
+                }
+            }
+        }
+    }
+    for(conteudo of dialogo8.conteudo){
+        if('alternativas' in conteudo){
+            for(alternativa of conteudo.alternativas){
+                if(alternativa.selecionado){
+                    alternativasValores.push(alternativa.valor);
+                }
+            }
+        }
+    }
+    if(dialogoAnn == 2){
+        if(salvo){
+            let config = {font:'Wellbutrin', fontSize:'32px', fill:'green', align:'center'};
+            telaConclusao = game.add.image(130,30,'caixaParabens2');
+            textoConclusao = game.add.group();
+            let texto = textoConclusao.add(game.add.text(300,50,'PARABÉNS! SEU JOGO É UM SUCESSO!\n A EXPERIÊNCIA FOI ALCANÇADA!', config));
+            texto.addColor('black', 9);
+            let img1 = textoConclusao.add(game.add.image(600,150,'bauAberto'));   
+            texto = textoConclusao.add(game.add.text(570,310,'SEU JOGO', config));
+            texto = textoConclusao.add(game.add.text(380,360,'EXPERIÊNCIA: ' + alternativasValores[0], config));
+            texto.fill = "black";
+            texto.fontSize = "20px";
+            texto = textoConclusao.add(game.add.text(380,390,'ELEMENTO: ' + alternativasValores[1], config));
+            texto.fill = "black";
+            texto.fontSize = "20px";
+            texto = textoConclusao.add(game.add.text(380,420,'TEMA: ' + alternativasValores[2], config));
+            texto.fill = "black";
+            texto.fontSize = "20px";
+            texto = textoConclusao.add(game.add.text(380,450,'IDEIA: ' + alternativasValores[3], config));
+            texto.fill = "black";
+            texto.fontSize = "20px";
+            texto = textoConclusao.add(game.add.text(380,480,'MECÂNICA: ' + alternativasValores[4], config));
+            texto.fill = "black";
+            texto.fontSize = "20px";
+            // texto = textoConclusao.add(game.add.text(570,310,'SEU JOGO', config));
+            // texto = textoConclusao.add(game.add.text(570,310,'SEU JOGO', config));
+            // texto = textoConclusao.add(game.add.text(570,310,'SEU JOGO', config));
+        }
+    
+        else{
+            let config = {font:'Wellbutrin', fontSize:'32px', fill:'red', align:'center'};
+            telaConclusao = game.add.image(130,100,'caixa_erro');
+            textoConclusao = game.add.group();
+            let texto = textoConclusao.add(game.add.text(300,120,'INFELIZMENTE SEU JOGO FALHOU!\n VOCÊ ESQUECEU DE DOCUMENTAR\n E SUA EXPERIÊNCIA FOI PERDIDA...',config));
+            texto.addColor('black',30);
+            let img1 = textoConclusao.add(game.add.image(590,250,'bauFechado'));
+            texto = textoConclusao.add(game.add.text(270,420,'Comece outra vez para conseguir seu tesouro...',config));
+            texto.fill = "black";   
+        }
+    }
+    
 }

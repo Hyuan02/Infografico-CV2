@@ -487,7 +487,7 @@ function zerarVelocidadePlayer(){
     personagem.body.velocity.y = 0;
 }
 
-function criarPlaceholders(){
+function criarPlaceholders(){ // funcao responsavel pela colisao com os objetos, para ver as caixas, marcar placeholders.visible como true
     placeholders.removeAll(true);
     if (scene == 1){
         console.log('entrou');
@@ -572,7 +572,7 @@ function criarPlaceholders(){
         retangulo6.body.immovable = true;
         retangulo7.body.immovable = true;
     }
-    placeholders.visible = false;
+    placeholders.visible = false; //para ver as caixas de colisao marcar como true
 }
 
 function concluirJogo(){

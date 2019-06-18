@@ -53,6 +53,7 @@ function create() {
     placeholders = game.add.group();
     personagem = game.add.sprite(590, 400, 'personagemTop', 1);
     caixaDialogo = game.add.image(100, 400, 'caixaDialogo');
+    caixaDialogo.height = caixaDialogo.height + 50;
     caixaLista = game.add.image(100, 40, 'caixaDialogo');
     caixaLista.scale.y = 2.2;
     caixaLista.visible = false;

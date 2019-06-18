@@ -1,5 +1,5 @@
 var game = new Phaser.Game(1280, 720, Phaser.CANVAS, 'phaser-example', { preload: preload, create: create, update: update });
-let personagem, personagemMovimento = true, limitesCenario, imagensPergunta, bounds, composicaoCenario, porta1, porta2, porta3, porta4,porta5, bot1, bot2, bot3, bot4, scene, caixaTexto, texto, alternativas, left, right;
+let personagem, personagemMovimento = true, limitesCenario, imagensPergunta, bounds, composicaoCenario, porta1, inicio, porta2, porta3, porta4,porta5, bot1, bot2, bot3, bot4, scene, caixaTexto, texto, alternativas, left, right;
 var indiceSelecionado = 0, perguntaAtual = [], dialogoAtual, dialogoAnn = 0, caixaDialogo;
 var checaLivros = false, livros;
 var checaGenericos = false, genericos, segundoDialogoGenerico = false;
@@ -34,24 +34,28 @@ function preload() {
     game.load.image('bot', './bot.png');
     game.load.image('livro', './livro_teste.png');
     game.load.image('generico', './generico.png');
-    game.load.image('caixaDialogo','./sprites/caixa_de_dialogo.png');
+    game.load.image('caixaDialogo', './sprites/caixa_de_dialogo.png');
     game.load.image('esfera1', './sprites/orb_estetica.png');
     game.load.image('esfera2', './sprites/orb_mecanica.png');
     game.load.image('esfera3', './sprites/orb_narrativa.png');
     game.load.image('esfera4', './sprites/orb_tecnologia.png');
-    game.load.image('panfleto','./sprites/quest_xp.png');
+    game.load.image('panfleto', './sprites/quest_xp.png');
     game.load.image('caneta_pena', './sprites/caneta_pena.png');
     game.load.image('caixaParabens2', './sprites/caixa_parabens2.png');
     game.load.image('bauAberto', './sprites/bau_aberto.png');
     game.load.image('bauFechado', './sprites/bau_fechado.png');
-    game.load.image('caixa_erro','./sprites/caixa_erro.png');
+    game.load.image('caixa_erro', './sprites/caixa_erro.png');
+    game.load.image('inicio', './sprites/inicio.jpeg');
 }
 
 function create() {
     composicaoCenario = game.add.group();
     placeholders = game.add.group();
     personagem = game.add.sprite(590, 400, 'personagemTop', 1);
-    caixaDialogo = game.add.image(100,400,'caixaDialogo');
+    caixaDialogo = game.add.image(100, 400, 'caixaDialogo');
+    caixaLista = game.add.image(100, 40, 'caixaDialogo');
+    caixaLista.scale.y = 2.2;
+    caixaLista.visible = false;
     caixaDialogo.visible = false;
     personagem.animations.add('down', [0, 1, 2], 18, true);
     left = personagem.animations.add('left', [3, 4, 5], 18, true);
@@ -71,9 +75,18 @@ function create() {
         wordWrap: true,
         wordWrapWidth: 900
     });
+    textoLista = game.add.text(150, 100, 'Testando texto', {
+        font: "16px Wellbutrin",
+        fill: "black",
+        align: "left",
+        wordWrap: true,
+        wordWrapWidth: 900
+    });
     texto.visible = false;
-    scene = 1;
-    cenario1();
+    textoLista.visible = false;
+    scene = 0;
+    cenario0();
+
     // concluirJogo();
 }
 
@@ -169,6 +182,9 @@ function checarColisao() {
             }
         }
     }
+    if (scene == 0) {
+        cenario0();
+    }
     if ((porta1) && (scene == 1)) {
         if (checkOverlap(personagem, porta1)) {
             scene = 2;
@@ -177,14 +193,14 @@ function checarColisao() {
             cenario2();
         }
 
-        if('alive' in canetaSave){
-            if(checkOverlap(personagem, canetaSave) && (game.input.keyboard.justPressed(Phaser.Keyboard.SPACEBAR))){
+        if ('alive' in canetaSave) {
+            if (checkOverlap(personagem, canetaSave) && (game.input.keyboard.justPressed(Phaser.Keyboard.SPACEBAR))) {
                 entraDialogo(dialogoSave)
                 salvo = true;
             }
         }
 
-        if(checkOverlap(personagem,porta5)){
+        if (checkOverlap(personagem, porta5)) {
             concluirJogo();
         }
 
@@ -228,12 +244,12 @@ function checarColisao() {
 
     if (scene == 3) {
         if ((checkOverlap(personagem, bot3)) && (game.input.keyboard.justPressed(Phaser.Keyboard.SPACEBAR))) {
-                if(!checaLivros)
-                    entraDialogo(dialogo3);
-                else
-                    entraDialogo(dialogo4);
-            }
-            checaColisaoLivros();
+            if (!checaLivros)
+                entraDialogo(dialogo3);
+            else
+                entraDialogo(dialogo4);
+        }
+        checaColisaoLivros();
     }
 
     if ((porta4) && (scene == 3)) {
@@ -246,6 +262,17 @@ function checarColisao() {
     }
 }
 
+function cenario0() {
+    composicaoCenario.removeAll(true);
+    personagem.visible = false;
+    composicaoCenario.create(0, 0, 'inicio');
+    if (game.input.keyboard.justPressed(Phaser.Keyboard.SPACEBAR)) {
+        scene = 1;
+        personagem.visible = true;
+        cenario1();
+    }
+}
+
 function cenario1() {
     composicaoCenario.removeAll(true); //limpa todos os elementos do cenario antes de compor o outro
     limitesCenario = composicaoCenario.create(640, 360, 'imgCenario');
@@ -255,14 +282,14 @@ function cenario1() {
     limitesCenario.height = 720;
     porta1 = composicaoCenario.create(125, 260, 'portaH');
     porta1.visible = false;
-    porta5 = composicaoCenario.create(550,700,'portaH');
+    porta5 = composicaoCenario.create(550, 700, 'portaH');
     porta5.visible = false;
     bot1 = composicaoCenario.create(620, 350, 'bot');
     game.physics.enable(bot1, Phaser.Physics.ARCADE);
     bot1.body.immovable = true;
     bot1.visible = false;
-    if(dialogoAnn == 2){
-        canetaSave = composicaoCenario.create(800,350, 'caneta_pena');
+    if (dialogoAnn == 2) {
+        canetaSave = composicaoCenario.create(800, 350, 'caneta_pena');
     }
     criarPlaceholders();
 }
@@ -285,7 +312,7 @@ function cenario2() {
     porta3 = composicaoCenario.create(1270, 240, 'portaV');
     porta3.visible = false;
     porta3.height = 20;
-    porta3.width =10;
+    porta3.width = 10;
     bot2 = composicaoCenario.create(770, 130, "bot");
     bot2.visible = false;
     bot4 = composicaoCenario.create(230, 250, 'bot');
@@ -307,12 +334,12 @@ function cenario3() {
     bot3.visible = false;
     porta4 = composicaoCenario.create(0, 240, 'portaV');
     porta4.visible = false;
-    livros.create(450,100,"bot");
-    livros.create(800,50,"bot");
-    livros.create(1050,50,"bot");
-    livros.create(600,500,"bot");
-    livros.create(850,500,"bot");
-    livros.create(1050,500,"bot");
+    livros.create(450, 100, "bot");
+    livros.create(800, 50, "bot");
+    livros.create(1050, 50, "bot");
+    livros.create(600, 500, "bot");
+    livros.create(850, 500, "bot");
+    livros.create(1050, 500, "bot");
     livros.visible = false;
     composicaoCenario.add(livros);
 }
@@ -331,24 +358,26 @@ function entraDialogo(dialogo) { //funcao de ler os dialogos
     dialogoAtual = dialogo;
     if (!dialogo.aconteceu) {
         texto.visible = true;
+        textoLista.visible = false;
+        caixaLista.visible = false;
         personagemMovimento = false;
         caixaDialogo.visible = true;
         if (dialogo.indiceDialogo < dialogo.conteudo.length) {
             if ('alternativas' in dialogo.conteudo[dialogo.indiceDialogo]) { //quando e pergunta
                 // personagemMovimento = true;
-                let config = {font:'Wellbutrin', fontSize:'32px'}
+                let config = { font: 'Wellbutrin', fontSize: '24px', fill: "blue", }
                 perguntaAtual = dialogo.conteudo[dialogo.indiceDialogo].alternativas; // a pergunta em que a pessoa esta
-            // let alt = game.add.text(100, 120 + (50 * i), alternativa.valor); //renderiza o texto de perguntas
-                alternativas.add(game.add.text(150,460,perguntaAtual[0].valor.toUpperCase(), config));
-                alternativas.add(game.add.text(150,540,perguntaAtual[1].valor.toUpperCase(), config));
-                alternativas.add(game.add.text(600,460,perguntaAtual[2].valor.toUpperCase(), config));
-                alternativas.add(game.add.text(600,540,perguntaAtual[3].valor.toUpperCase(), config));
-                if('imagens' in dialogo.conteudo[dialogo.indiceDialogo]){
+                // let alt = game.add.text(100, 120 + (50 * i), alternativa.valor); //renderiza o texto de perguntas
+                alternativas.add(game.add.text(150, 460, perguntaAtual[0].valor.toUpperCase(), config));
+                alternativas.add(game.add.text(150, 540, perguntaAtual[1].valor.toUpperCase(), config));
+                alternativas.add(game.add.text(600, 460, perguntaAtual[2].valor.toUpperCase(), config));
+                alternativas.add(game.add.text(600, 540, perguntaAtual[3].valor.toUpperCase(), config));
+                if ('imagens' in dialogo.conteudo[dialogo.indiceDialogo]) {
                     let i = 0;
-                    for(imagem of dialogo.conteudo[dialogo.indiceDialogo].imagens){
+                    for (imagem of dialogo.conteudo[dialogo.indiceDialogo].imagens) {
                         console.log("entrou");
                         console.log(imagem);
-                        imagensPergunta.create(100 + (i*100),100,imagem);
+                        imagensPergunta.create(100 + (i * 100), 100, imagem);
                         // game.add.image(200 * (i+200),200,'esfera1');
                         i++;
                     }
@@ -364,18 +393,24 @@ function entraDialogo(dialogo) { //funcao de ler os dialogos
                 dialogo.indiceDialogo++;
             }
             else if ('lista' in dialogo.conteudo[dialogo.indiceDialogo]) { //quando e lista
-                texto.visible = true;
+                textoLista.visible = true;
+                caixaLista.visible = true;
+                texto.visible = false;
+                caixaDialogo.visible = false;
                 let textString = "";
                 for (item of dialogo.conteudo[dialogo.indiceDialogo].lista) {
                     textString += item + "\n";
                 }
                 texto.setText(textString);
+                textoLista.setText(textString);
                 dialogo.indiceDialogo++;
             }
         }
         else {
+            textoLista.visible = false;
             texto.visible = false;
             caixaDialogo.visible = false;
+            caixaLista.visible = false;
             dialogo.aconteceu = true;
             personagemMovimento = true;
         }
@@ -383,7 +418,8 @@ function entraDialogo(dialogo) { //funcao de ler os dialogos
 
     }
     else {
-        texto.setText(dialogo.conteudo[dialogo.indiceDialogo-1].nome.toUpperCase() + ":\n" + dialogo.conteudo[dialogo.indiceDialogo - 1].texto);
+        texto.setText(dialogo.conteudo[dialogo.indiceDialogo - 1].nome.toUpperCase() + ":\n" + dialogo.conteudo[dialogo.indiceDialogo - 1].texto);
+        textoLista.visible = false;
         texto.visible = !texto.visible;
         caixaDialogo.visible = !caixaDialogo.visible;
         personagemMovimento = !personagemMovimento;
@@ -485,59 +521,59 @@ function checaColisaoGenericos() {
     }
 }
 
-function zerarVelocidadePlayer(){
+function zerarVelocidadePlayer() {
     personagem.body.velocity.x = 0;
     personagem.body.velocity.y = 0;
 }
 
-function criarPlaceholders(){ // funcao responsavel pela colisao com os objetos, para ver as caixas, marcar placeholders.visible como true
+function criarPlaceholders() { // funcao responsavel pela colisao com os objetos, para ver as caixas, marcar placeholders.visible como true
     placeholders.removeAll(true);
-    if (scene == 1){
+    if (scene == 1) {
         console.log('entrou');
         let retangulo1, retangulo2;
-        retangulo1 = placeholders.create(350,250,'livro');
+        retangulo1 = placeholders.create(350, 250, 'livro');
         retangulo1.width = 550;
         retangulo1.height = 200;
         retangulo1.anchor.y = 0.5;
-        retangulo2 = placeholders.create(900,200,'livro');
+        retangulo2 = placeholders.create(900, 200, 'livro');
         retangulo2.width = 350;
         retangulo2.height = 200;
         retangulo2.anchor.y = 0.5;
         game.physics.enable(retangulo1, Phaser.Physics.ARCADE);
-        game.physics.enable(retangulo2,Phaser.Physics.ARCADE);
+        game.physics.enable(retangulo2, Phaser.Physics.ARCADE);
         retangulo1.body.immovable = true;
         retangulo2.body.immovable = true;
         game.physics.arcade.collide(personagem, retangulo1);
         game.physics.arcade.collide(personagem, retangulo2);
     }
 
-    if(scene == 2){
+    if (scene == 2) {
         let retangulo1, retangulo2, retangulo3, retangulo4, retangulo5;
-        retangulo1 = placeholders.create(540,500,'livro');
+        retangulo1 = placeholders.create(540, 500, 'livro');
         retangulo1.width = 180;
         retangulo1.height = 120;
         retangulo1.anchor.y = 0.5;
-        retangulo2 = placeholders.create(940,450,'livro');
+        retangulo2 = placeholders.create(940, 450, 'livro');
         retangulo2.width = 165;
         retangulo2.height = 150;
         retangulo2.anchor.y = 0.3;
-        retangulo3 = placeholders.create(500,80,'livro');
+        retangulo3 = placeholders.create(500, 80, 'livro');
         retangulo3.width = 600;
         retangulo3.height = 60;
         retangulo3.anchor.y = 0.3;
-        retangulo4 = placeholders.create(100,120,'livro');
+        retangulo4 = placeholders.create(100, 120, 'livro');
         retangulo4.width = 350;
         retangulo4.height = 100;
         retangulo4.anchor.y = 0.3;
-        retangulo5 = placeholders.create(840,440,'livro');
+        retangulo5 = placeholders.create(840, 440, 'livro');
         retangulo5.width = 55;
         retangulo5.height = 130;
         retangulo5.anchor.y = 0.3;
         game.physics.enable(retangulo1, Phaser.Physics.ARCADE);
-        game.physics.enable(retangulo2,Phaser.Physics.ARCADE);
-        game.physics.enable(retangulo3,Phaser.Physics.ARCADE);
-        game.physics.enable(retangulo4,Phaser.Physics.ARCADE);
-        game.physics.enable(retangulo5,Phaser.Physics.ARCADE);
+        game.physics.enable(retangulo2, Phaser.Physics.ARCADE);
+        game.physics.enable(retangulo3, Phaser.Physics.ARCADE);
+        game.physics.enable(retangulo4, Phaser.Physics.ARCADE);
+        game.physics.enable(retangulo5, Phaser.Physics.ARCADE);
         retangulo1.body.immovable = true;
         retangulo2.body.immovable = true;
         retangulo3.body.immovable = true;
@@ -545,31 +581,31 @@ function criarPlaceholders(){ // funcao responsavel pela colisao com os objetos,
         retangulo5.body.immovable = true;
     }
 
-    if(scene == 3){
-        let retangulo1, retangulo2, retangulo3,retangulo4, retangulo5, retangulo6,retangulo7;
-        retangulo1 = placeholders.create(90,50,'livro');
+    if (scene == 3) {
+        let retangulo1, retangulo2, retangulo3, retangulo4, retangulo5, retangulo6, retangulo7;
+        retangulo1 = placeholders.create(90, 50, 'livro');
         retangulo1.width = 200;
         retangulo1.height = 120;
         retangulo1.anchor.y = 0.5;
-        retangulo2 = placeholders.create(350,50,'livro');
+        retangulo2 = placeholders.create(350, 50, 'livro');
         retangulo2.width = 350;
         retangulo2.height = 120;
         retangulo2.anchor.y = 0.5;
-        retangulo3 = placeholders.create(760,50,'livro');
+        retangulo3 = placeholders.create(760, 50, 'livro');
         retangulo3.width = 170;
         retangulo3.height = 120;
         retangulo3.anchor.y = 0.5;
-        retangulo4 = placeholders.create(1000,50,'livro');
+        retangulo4 = placeholders.create(1000, 50, 'livro');
         retangulo4.width = 170;
         retangulo4.height = 120;
         retangulo4.anchor.y = 0.5;
-        retangulo5 = placeholders.create(1000,310,'livro');
+        retangulo5 = placeholders.create(1000, 310, 'livro');
         retangulo5.width = 170;
         retangulo5.height = 110;
-        retangulo6 = placeholders.create(790,310,'livro');
+        retangulo6 = placeholders.create(790, 310, 'livro');
         retangulo6.width = 170;
         retangulo6.height = 110;
-        retangulo7 = placeholders.create(570,310,'livro');
+        retangulo7 = placeholders.create(570, 310, 'livro');
         retangulo7.width = 170;
         retangulo7.height = 110;
         game.physics.enable(retangulo1, Phaser.Physics.ARCADE);
@@ -590,92 +626,92 @@ function criarPlaceholders(){ // funcao responsavel pela colisao com os objetos,
     placeholders.visible = false; //para ver as caixas de colisao marcar como true
 }
 
-function concluirJogo(){
+function concluirJogo() {
     let alternativasValores = [];
-    for(conteudo of dialogo1.conteudo){
-        if('alternativas' in conteudo){
-            for(alternativa of conteudo.alternativas){
-                if(alternativa.selecionado){
+    for (conteudo of dialogo1.conteudo) {
+        if ('alternativas' in conteudo) {
+            for (alternativa of conteudo.alternativas) {
+                if (alternativa.selecionado) {
                     alternativasValores.push(alternativa.valor);
                 }
             }
         }
     }
-    for(conteudo of dialogo2.conteudo){
-        if('alternativas' in conteudo){
-            for(alternativa of conteudo.alternativas){
-                if(alternativa.selecionado){
+    for (conteudo of dialogo2.conteudo) {
+        if ('alternativas' in conteudo) {
+            for (alternativa of conteudo.alternativas) {
+                if (alternativa.selecionado) {
                     alternativasValores.push(alternativa.valor);
                 }
             }
         }
     }
-    for(conteudo of dialogo4.conteudo){
-        if('alternativas' in conteudo){
-            for(alternativa of conteudo.alternativas){
-                if(alternativa.selecionado){
+    for (conteudo of dialogo4.conteudo) {
+        if ('alternativas' in conteudo) {
+            for (alternativa of conteudo.alternativas) {
+                if (alternativa.selecionado) {
                     alternativasValores.push(alternativa.valor);
                 }
             }
         }
     }
-    for(conteudo of dialogo6.conteudo){
-        if('alternativas' in conteudo){
-            for(alternativa of conteudo.alternativas){
-                if(alternativa.selecionado){
+    for (conteudo of dialogo6.conteudo) {
+        if ('alternativas' in conteudo) {
+            for (alternativa of conteudo.alternativas) {
+                if (alternativa.selecionado) {
                     alternativasValores.push(alternativa.valor);
                 }
             }
         }
     }
-    for(conteudo of dialogo8.conteudo){
-        if('alternativas' in conteudo){
-            for(alternativa of conteudo.alternativas){
-                if(alternativa.selecionado){
+    for (conteudo of dialogo8.conteudo) {
+        if ('alternativas' in conteudo) {
+            for (alternativa of conteudo.alternativas) {
+                if (alternativa.selecionado) {
                     alternativasValores.push(alternativa.valor);
                 }
             }
         }
     }
-    if(dialogoAnn == 2){
-        if(salvo){
-            let config = {font:'Wellbutrin', fontSize:'32px', fill:'green', align:'center'};
-            telaConclusao = game.add.image(130,30,'caixaParabens2');
+    if (dialogoAnn == 2) {
+        if (salvo) {
+            let config = { font: 'Wellbutrin', fontSize: '32px', fill: 'green', align: 'center' };
+            telaConclusao = game.add.image(130, 30, 'caixaParabens2');
             textoConclusao = game.add.group();
-            let texto = textoConclusao.add(game.add.text(300,50,'PARABÉNS! SEU JOGO É UM SUCESSO!\n A EXPERIÊNCIA FOI ALCANÇADA!', config));
+            let texto = textoConclusao.add(game.add.text(300, 50, 'PARABÉNS! SEU JOGO É UM SUCESSO!\n A EXPERIÊNCIA FOI ALCANÇADA!', config));
             texto.addColor('black', 9);
-            let img1 = textoConclusao.add(game.add.image(600,150,'bauAberto'));   
-            texto = textoConclusao.add(game.add.text(570,310,'SEU JOGO', config));
-            texto = textoConclusao.add(game.add.text(380,360,'EXPERIÊNCIA: ' + alternativasValores[0], config));
+            let img1 = textoConclusao.add(game.add.image(600, 150, 'bauAberto'));
+            texto = textoConclusao.add(game.add.text(570, 310, 'SEU JOGO', config));
+            texto = textoConclusao.add(game.add.text(380, 360, 'EXPERIÊNCIA: ' + alternativasValores[0], config));
             texto.fill = "black";
             texto.fontSize = "20px";
-            texto = textoConclusao.add(game.add.text(380,390,'ELEMENTO: ' + alternativasValores[1], config));
+            texto = textoConclusao.add(game.add.text(380, 390, 'ELEMENTO: ' + alternativasValores[1], config));
             texto.fill = "black";
             texto.fontSize = "20px";
-            texto = textoConclusao.add(game.add.text(380,420,'TEMA: ' + alternativasValores[2], config));
+            texto = textoConclusao.add(game.add.text(380, 420, 'TEMA: ' + alternativasValores[2], config));
             texto.fill = "black";
             texto.fontSize = "20px";
-            texto = textoConclusao.add(game.add.text(380,450,'IDEIA: ' + alternativasValores[3], config));
+            texto = textoConclusao.add(game.add.text(380, 450, 'IDEIA: ' + alternativasValores[3], config));
             texto.fill = "black";
             texto.fontSize = "20px";
-            texto = textoConclusao.add(game.add.text(380,480,'MECÂNICA: ' + alternativasValores[4], config));
+            texto = textoConclusao.add(game.add.text(380, 480, 'MECÂNICA: ' + alternativasValores[4], config));
             texto.fill = "black";
             texto.fontSize = "20px";
             // texto = textoConclusao.add(game.add.text(570,310,'SEU JOGO', config));
             // texto = textoConclusao.add(game.add.text(570,310,'SEU JOGO', config));
             // texto = textoConclusao.add(game.add.text(570,310,'SEU JOGO', config));
         }
-    
-        else{
-            let config = {font:'Wellbutrin', fontSize:'32px', fill:'red', align:'center'};
-            telaConclusao = game.add.image(130,100,'caixa_erro');
+
+        else {
+            let config = { font: 'Wellbutrin', fontSize: '32px', fill: 'red', align: 'center' };
+            telaConclusao = game.add.image(130, 100, 'caixa_erro');
             textoConclusao = game.add.group();
-            let texto = textoConclusao.add(game.add.text(300,120,'INFELIZMENTE SEU JOGO FALHOU!\n VOCÊ ESQUECEU DE DOCUMENTAR\n E SUA EXPERIÊNCIA FOI PERDIDA...',config));
-            texto.addColor('black',30);
-            let img1 = textoConclusao.add(game.add.image(590,250,'bauFechado'));
-            texto = textoConclusao.add(game.add.text(270,420,'Comece outra vez para conseguir seu tesouro...',config));
-            texto.fill = "black";   
+            let texto = textoConclusao.add(game.add.text(300, 120, 'INFELIZMENTE SEU JOGO FALHOU!\n VOCÊ ESQUECEU DE DOCUMENTAR\n E SUA EXPERIÊNCIA FOI PERDIDA...', config));
+            texto.addColor('black', 30);
+            let img1 = textoConclusao.add(game.add.image(590, 250, 'bauFechado'));
+            texto = textoConclusao.add(game.add.text(270, 420, 'Comece outra vez para conseguir seu tesouro...', config));
+            texto.fill = "black";
         }
     }
-    
+
 }

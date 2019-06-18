@@ -37,7 +37,7 @@ dialogo2 = {"indiceDialogo":0, "conteudo":[
     {"nome": "Rudolph, o Mago", "texto":"Ao escolher um desses elementos como núcleo, os outros três serão utilizados para reforçar as características do núcleo do seu Jogo. Agora meu jovem, você me parece um aventureiro bastante promissor e por isso lhe darei um dos núcleos como um presente para sua jornada. Qual você deseja escolher?"},
     {"nome": "Jogador", "texto":"..."},
     {"alternativas":[{"valor":"Núcleo da Mecânica", "selecionado":false}, {"valor":"Núcleo da Narrativa", "selecionado":false}, {"valor":"Núcleo da Estética", "selecionado":false}, {"valor":"Núcleo da Tecnologia", "selecionado":false}], "imagens":["esfera1", "esfera2", "esfera3", "esfera4"]},
-    {"nome": "Rudolph, o Mago", "texto":"Boa escolha, agora deverá escolher um Tema. Creio que Amathea, a aventureira poderá lhe guiar nisso, ela possui excelentes histórias. Você pode encontrá-la na biblioteca."}
+    {"nome": "Rudolph, o Mago", "texto":"Boa escolha, agora deverá escolher um Tema. Creio que Amathea, a Aventureira poderá lhe guiar nisso, ela possui excelentes histórias. Você pode encontrá-la na biblioteca."}
 ], "aconteceu":false};
 
 dialogo3 = { "indiceDialogo":0, "conteudo":[
@@ -55,7 +55,7 @@ dialogo3 = { "indiceDialogo":0, "conteudo":[
 dialogo4 = {"indiceDialogo":0, "conteudo":[
     {"nome":"Amathea, a Aventureira", "texto":"Qual Tema você gostaria de escolher?"},
     {"alternativas":[{"valor":"Tema Pirata", "selecionado":false },{"valor":"Tema Mitológico", "selecionado":false },{"valor":"Tema Espacial", "selecionado":false },{"valor":"Tema Culinário", "selecionado":false}]},
-    {"nome":"Amathea, a Aventureira", "texto":"Que maravilhoso! Seu Jogo vai ser incrível! Agora que você tem um Tema, poderá desenvolver a Ideia do seu Jogo. Vá para o bar falar com Mary, a bartender. Ela é ótima para se debater algumas ideias."},
+    {"nome":"Amathea, a Aventureira", "texto":"Que maravilhoso! Seu Jogo vai ser incrível! Agora que você tem um Tema, poderá desenvolver a Ideia do seu Jogo. Vá para o bar falar com Mary, a Bartender. Ela é ótima para se debater algumas ideias."},
 
 ], "aconteceu": false};
 

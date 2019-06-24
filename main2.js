@@ -298,7 +298,7 @@ function cenario1() {
     bot1.body.immovable = true;
     bot1.visible = false;
     if (dialogoAnn == 2) {
-        canetaSave = composicaoCenario.create(800, 350, 'caneta_pena');
+        canetaSave = composicaoCenario.create(1080, 290, 'caneta_pena');
     }
     criarPlaceholders();
 }

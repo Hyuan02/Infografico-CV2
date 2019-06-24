@@ -1,5 +1,5 @@
 var game = new Phaser.Game(1280, 720, Phaser.CANVAS, 'phaser-example', { preload: preload, create: create, update: update });
-let personagem, personagemMovimento = true, limitesCenario, imagensPergunta, bounds, composicaoCenario, porta1, inicio, porta2, porta3, porta4,porta5, bot1, bot2, bot3, bot4, scene, caixaTexto, texto, alternativas, left, right;
+let personagem, personagemMovimento = true, limitesCenario, imagensPergunta, textoPergunta, textoLista, bounds, composicaoCenario, porta1, inicio, porta2, porta3, porta4,porta5, bot1, bot2, bot3, bot4, scene, caixaTexto, texto, alternativas, left, right;
 var indiceSelecionado = 0, perguntaAtual = [], dialogoAtual, dialogoAnn = 0, caixaDialogo;
 var checaLivros = false, livros;
 var checaGenericos = false, genericos, segundoDialogoGenerico = false;
@@ -69,7 +69,7 @@ function create() {
     alternativas = game.add.group();
     imagensPergunta = game.add.group();
     imagensPergunta.visible = false;
-    texto = game.add.text(150, 430, 'Testando texto', {
+    texto = game.add.text(150, 450, 'Testando texto', {
         font: "24px Wellbutrin",
         fill: "black",
         align: "left",
@@ -83,8 +83,16 @@ function create() {
         wordWrap: true,
         wordWrapWidth: 900
     });
+    textoPergunta = game.add.text(150, 450, 'Testando texto', {
+        font: "24px Wellbutrin",
+        fill: "black",
+        align: "left",
+        wordWrap: true,
+        wordWrapWidth: 900
+    });
     texto.visible = false;
     textoLista.visible = false;
+    textoPergunta.visible = false;
     scene = 0;
     cenario0();
 
@@ -338,7 +346,7 @@ function cenario3() {
     livros.create(450, 100, "bot");
     livros.create(800, 50, "bot");
     livros.create(1050, 50, "bot");
-    livros.create(600, 500, "bot");
+    livros.create(150, 130, "bot");
     livros.create(850, 500, "bot");
     livros.create(1050, 500, "bot");
     livros.visible = false;
@@ -363,16 +371,19 @@ function entraDialogo(dialogo) { //funcao de ler os dialogos
         caixaLista.visible = false;
         personagemMovimento = false;
         caixaDialogo.visible = true;
+        textoPergunta.visible = false;
         if (dialogo.indiceDialogo < dialogo.conteudo.length) {
             if ('alternativas' in dialogo.conteudo[dialogo.indiceDialogo]) { //quando e pergunta
                 // personagemMovimento = true;
                 let config = { font: 'Wellbutrin', fontSize: '24px', fill: "blue", }
                 perguntaAtual = dialogo.conteudo[dialogo.indiceDialogo].alternativas; // a pergunta em que a pessoa esta
                 // let alt = game.add.text(100, 120 + (50 * i), alternativa.valor); //renderiza o texto de perguntas
-                alternativas.add(game.add.text(150, 460, perguntaAtual[0].valor.toUpperCase(), config));
-                alternativas.add(game.add.text(150, 540, perguntaAtual[1].valor.toUpperCase(), config));
-                alternativas.add(game.add.text(600, 460, perguntaAtual[2].valor.toUpperCase(), config));
-                alternativas.add(game.add.text(600, 540, perguntaAtual[3].valor.toUpperCase(), config));
+                textoPergunta.setText(dialogo.conteudo[dialogo.indiceDialogo].pergunta);
+                textoPergunta.visible = true;
+                alternativas.add(game.add.text(150, 530, perguntaAtual[0].valor.toUpperCase(), config));
+                alternativas.add(game.add.text(150, 620, perguntaAtual[1].valor.toUpperCase(), config));
+                alternativas.add(game.add.text(600, 530, perguntaAtual[2].valor.toUpperCase(), config));
+                alternativas.add(game.add.text(600, 620, perguntaAtual[3].valor.toUpperCase(), config));
                 if ('imagens' in dialogo.conteudo[dialogo.indiceDialogo]) {
                     let i = 0;
                     for (imagem of dialogo.conteudo[dialogo.indiceDialogo].imagens) {
@@ -387,6 +398,7 @@ function entraDialogo(dialogo) { //funcao de ler os dialogos
                     imagensPergunta.scale.y = 2;
                 }
                 texto.visible = false;
+                textoLista.visible = false;
             }
             else if ('texto' in dialogo.conteudo[dialogo.indiceDialogo]) { //quando e texto
                 texto.visible = true;
@@ -410,6 +422,7 @@ function entraDialogo(dialogo) { //funcao de ler os dialogos
         else {
             textoLista.visible = false;
             texto.visible = false;
+            textoPergunta.visible = false;
             caixaDialogo.visible = false;
             caixaLista.visible = false;
             dialogo.aconteceu = true;

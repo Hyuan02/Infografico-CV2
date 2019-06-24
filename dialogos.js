@@ -22,7 +22,7 @@ dialogo1 = {"indiceDialogo":0, "conteudo": [
     {"nome": "Ann, a Estalajadeira", "texto":"Agora que você já sabe o que é um Jogo, deve construir um para conseguir sua Experiência. Você tem que planejar como quer que ele seja, essa etapa se chama Projeto. Com o Projeto feito e documentado, poderá construir seu Jogo através da Prototipação."},
     {"nome": "Ann, a Estalajadeira", "texto":"Primeiro, vamos definir que tipo de Experiência você quer conseguir com seu Jogo. Existem jogos específicos para cada Experiência que se deseja conseguir, então escolha com sabedoria o que você deseja e eu lhe darei um mapa para ela!"},
     {"pergunta":"Escolha com sabedoria o que você deseja e eu lhe darei um mapa para ela!","alternativas":[{"valor":"Diversão", "selecionado":false}, {"valor":"Fuga", "selecionado":false}, {"valor":"Prazer", "selecionado":false}, {"valor":"Livre Escolha", "selecionado":false}]},
-    {"nome": "Ann, a Estalajadeira", "texto":"Perfeito! Vamos começar os preparativos para a construção do seu Jogo. Agora você precisa dos Elementos para construir o Jogo, fale com o Rudolph, o Mago. Ele saberá como te ajudar."}
+    {"nome": "Ann, a Estalajadeira", "texto":"Perfeito! Vamos começar os preparativos para a construção do seu Jogo. Agora você precisa dos Elementos para construir o Jogo, fale com o RUDOLPH, o MAGO. Ele saberá como te ajudar."}
 ],"aconteceu": false};
 
 dialogo2 = {"indiceDialogo":0, "conteudo":[
@@ -37,7 +37,7 @@ dialogo2 = {"indiceDialogo":0, "conteudo":[
     {"nome": "Rudolph, o Mago", "texto":"Ao escolher um desses elementos como núcleo, os outros três serão utilizados para reforçar as características do núcleo do seu Jogo. Agora meu jovem, você me parece um aventureiro bastante promissor e por isso lhe darei um dos núcleos como um presente para sua jornada. Qual você deseja escolher?"},
     {"nome": "Jogador", "texto":"..."},
     {"pergunta":"Qual você deseja escolher?", "alternativas":[{"valor":"Núcleo da Mecânica", "selecionado":false}, {"valor":"Núcleo da Narrativa", "selecionado":false}, {"valor":"Núcleo da Estética", "selecionado":false}, {"valor":"Núcleo da Tecnologia", "selecionado":false}]},
-    {"nome": "Rudolph, o Mago", "texto":"Boa escolha, agora deverá escolher um Tema. Creio que Amathea, a Aventureira poderá lhe guiar nisso, ela possui excelentes histórias. Você pode encontrá-la na biblioteca."}
+    {"nome": "Rudolph, o Mago", "texto":"Boa escolha, agora deverá escolher um Tema. Creio que AMATHEA, a AVENTUREIRA poderá lhe guiar nisso, ela possui excelentes histórias. Você pode encontrá-la na biblioteca."}
 ], "aconteceu":false};
 
 dialogo3 = { "indiceDialogo":0, "conteudo":[
@@ -54,7 +54,7 @@ dialogo3 = { "indiceDialogo":0, "conteudo":[
 
 dialogo4 = {"indiceDialogo":0, "conteudo":[
     {"pergunta":"Qual Tema você gostaria de escolher?", "alternativas":[{"valor":"Tema Pirata", "selecionado":false },{"valor":"Tema Mitológico", "selecionado":false },{"valor":"Tema Espacial", "selecionado":false },{"valor":"Tema Culinário", "selecionado":false}]},
-    {"nome":"Amathea, a Aventureira", "texto":"Que maravilhoso! Seu Jogo vai ser incrível! Agora que você tem um Tema, poderá desenvolver a Ideia do seu Jogo. Vá para o bar falar com Mary, a Bartender. Ela é ótima para se debater algumas ideias."},
+    {"nome":"Amathea, a Aventureira", "texto":"Que maravilhoso! Seu Jogo vai ser incrível! Agora que você tem um Tema, poderá desenvolver a Ideia do seu Jogo. Vá para o bar falar com MARY, a BARTENDER. Ela é ótima para se debater algumas ideias."},
 
 ], "aconteceu": false};
 
@@ -71,7 +71,7 @@ dialogo6 = {"indiceDialogo":0, "conteudo":[
     {"nome": "Mary a Bartender", "texto":"Agora você tem bastante coisa não? Não esqueça de documentar para não perder."},
     {"nome": "Jogador", "texto":"...."},
     {"nome": "Mary a Bartender", "texto":"Você não sabe o que é documentar?! Documentar é registrar tudo o que você produziu e pensou a respeito do seu Jogo. Para isso criamos o GDD ou Game Design Document. No GDD estará constado tudo sobre o seu Jogo, desde a Ideia, Tema, Narrativa, Fases produzidas, Mecânicas, tudo. Para que no futuro você não esqueça o que estava sendo feito no seu Jogo."},
-    {"nome": "Mary a Bartender", "texto":"Ele servirá também como meio de comunicação para que outras pessoas possam saber como é o seu Jogo. Você pode criar seu GDD com a Ann, a Estalajadeira. Basta escrever no papel que está em cima do seu balcão. Depois de documentar seu Jogo fale com a Ann, a Estalajadeira, ela saberá como lhe guiar."}
+    {"nome": "Mary a Bartender", "texto":"Ele servirá também como meio de comunicação para que outras pessoas possam saber como é o seu Jogo. Você pode criar seu GDD com a ANN, a ESTALAJADEIRA. Basta escrever no papel que está em cima do seu balcão. Depois de documentar seu Jogo fale com a Ann, a Estalajadeira, ela saberá como lhe guiar."}
 ], "aconteceu":false};
 
 dialogo7 = {"indiceDialogo":0, "conteudo":[

@@ -70,7 +70,7 @@ function create() {
     imagensPergunta = game.add.group();
     imagensPergunta.visible = false;
     texto = game.add.text(150, 450, 'Testando texto', {
-        font: "24px Wellbutrin",
+        font: "22px Wellbutrin",
         fill: "black",
         align: "left",
         wordWrap: true,
@@ -84,7 +84,7 @@ function create() {
         wordWrapWidth: 900
     });
     textoPergunta = game.add.text(150, 450, 'Testando texto', {
-        font: "24px Wellbutrin",
+        font: "22px Wellbutrin",
         fill: "black",
         align: "left",
         wordWrap: true,
@@ -689,31 +689,56 @@ function concluirJogo() {
     }
     if (dialogoAnn == 2) {
         if (salvo) {
-            let config = { font: 'Wellbutrin', fontSize: '32px', fill: 'green', align: 'center' };
+            let config = { font: 'Wellbutrin', fontSize: '28px', fill: 'green', align: 'center' };
             telaConclusao = game.add.image(130, 30, 'caixaParabens2');
             textoConclusao = game.add.group();
-            let texto = textoConclusao.add(game.add.text(300, 50, 'PARABÉNS! SEU JOGO É UM SUCESSO!\n A EXPERIÊNCIA FOI ALCANÇADA!', config));
-            texto.addColor('black', 9);
-            let img1 = textoConclusao.add(game.add.image(600, 150, 'bauAberto'));
+            let texto = textoConclusao.add(game.add.text((limitesCenario.width/2)-300, 70, 'PARABÉNS! SEU JOGO É UM SUCESSO!\n A EXPERIÊNCIA FOI ALCANÇADA!', config));
+            texto.fill = "green";
+            let img1 = textoConclusao.add(game.add.image(600, 165    , 'bauAberto'));
             texto = textoConclusao.add(game.add.text(570, 310, 'SEU JOGO', config));
-            texto = textoConclusao.add(game.add.text(380, 360, 'EXPERIÊNCIA: ' + alternativasValores[0], config));
+            texto.fill = "green";
+            texto.fontSize = "28px";
+            texto.align = "center";
+            texto = textoConclusao.add(game.add.text((limitesCenario.width/2)-150, 360, 'EXPERIÊNCIA:' , config));
             texto.fill = "black";
             texto.fontSize = "20px";
-            texto = textoConclusao.add(game.add.text(380, 390, 'ELEMENTO: ' + alternativasValores[1], config));
+            texto.align = "right";
+            texto = textoConclusao.add(game.add.text((limitesCenario.width/2)+30, 360, alternativasValores[0], config));
             texto.fill = "black";
             texto.fontSize = "20px";
-            texto = textoConclusao.add(game.add.text(380, 420, 'TEMA: ' + alternativasValores[2], config));
+            texto.align = "left";
+            texto = textoConclusao.add(game.add.text((limitesCenario.width/2)-150, 390, 'ELEMENTO:', config));
             texto.fill = "black";
             texto.fontSize = "20px";
-            texto = textoConclusao.add(game.add.text(380, 450, 'IDEIA: ' + alternativasValores[3], config));
+            texto.align = "right";
+            texto = textoConclusao.add(game.add.text((limitesCenario.width/2)+30, 390, alternativasValores[1], config));
             texto.fill = "black";
             texto.fontSize = "20px";
-            texto = textoConclusao.add(game.add.text(380, 480, 'MECÂNICA: ' + alternativasValores[4], config));
+            texto.align = "left";
+            texto = textoConclusao.add(game.add.text((limitesCenario.width/2)-150, 420, 'TEMA:', config));
             texto.fill = "black";
             texto.fontSize = "20px";
-            // texto = textoConclusao.add(game.add.text(570,310,'SEU JOGO', config));
-            // texto = textoConclusao.add(game.add.text(570,310,'SEU JOGO', config));
-            // texto = textoConclusao.add(game.add.text(570,310,'SEU JOGO', config));
+            texto.align = "right";
+            texto = textoConclusao.add(game.add.text((limitesCenario.width/2)+30, 420, alternativasValores[2], config));
+            texto.fill = "black";
+            texto.fontSize = "20px";
+            texto.align = "left";
+            texto = textoConclusao.add(game.add.text((limitesCenario.width/2)-150, 450, 'IDEIA:', config));
+            texto.fill = "black";
+            texto.fontSize = "20px";
+            texto.align = "right";
+            texto = textoConclusao.add(game.add.text((limitesCenario.width/2)+30, 450, alternativasValores[3], config));
+            texto.fill = "black";
+            texto.fontSize = "20px";
+            texto.align = "left";
+            texto = textoConclusao.add(game.add.text((limitesCenario.width/2)-150, 480, 'MECÂNICA:', config));
+            texto.fill = "black";
+            texto.fontSize = "20px";
+            texto.align = "right";
+            texto = textoConclusao.add(game.add.text((limitesCenario.width/2)+30, 480, alternativasValores[4], config));
+            texto.fill = "black";
+            texto.fontSize = "20px";
+            texto.align = "left";
         }
 
         else {
